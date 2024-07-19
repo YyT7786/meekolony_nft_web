@@ -1,5 +1,5 @@
 import { Tabbar } from "@/components/tabbar";
-import { Header } from "./header";
+import { Header } from "@/components/header";
 import { CollectionHeader } from "@/components/collection-header";
 
 type Props = {
@@ -11,8 +11,9 @@ const MainLayout = ({
 }: Props) => {
     return (
         <>
-            <Header />
-            <CollectionHeader />
+            <Header 
+                isMyWalletVisible={true}
+            />
             <Tabbar />
             <div className="px-6 pt-6 pb-6 bg-[#141420]">
                 {children}

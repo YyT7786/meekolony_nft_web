@@ -1,7 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Home() {
-    return (
-        <div>
-            Main Page
-        </div>
-    );
+    return redirect(`/floor-price`)
 };
