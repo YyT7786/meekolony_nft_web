@@ -10,15 +10,15 @@ import {
     CartesianGrid,
 } from "recharts";
 
-const items = [
-    { l_val: "1", hight: 996 },
-    { l_val: "2-5", hight: 612 },
-    { l_val: "6-24", hight: 267 },
-    { l_val: "25-49", hight: 40 },
-    { l_val: "50+", hight: 26 },
-]
+import { HolderStats } from "@/types/meekolony";
 
-export const HoldersChart = () => {
+type Props = {
+    holderStats: HolderStats;
+}
+
+export const HoldersChart = ({
+    holderStats
+}: Props) => {
     return (
         <div className="flex flex-col gap-y-3">
             <div className="text-white text-lg font-semibold">
@@ -26,7 +26,7 @@ export const HoldersChart = () => {
             </div>
             <div className="h-[320px] w-[400px] bg-[#201f2d] rounded-lg pr-10 pt-4 text-xs">
                 <ResponsiveContainer height={"100%"} width={"100%"}>
-                    <BarChart height={128} width={128} data={items}>
+                    <BarChart height={128} width={128} data={holderStats?.tokenHistogram?.bars ?? []}>
                         <Tooltip
                             content={(props) => (
                                 <div>

@@ -1,6 +1,20 @@
 "use client";
 
-export const HoldersState = () => {
+import { HolderStats } from "@/types/meekolony";
+
+type Props = {
+    holderStats: HolderStats;
+}
+
+export const HoldersState = ({
+    holderStats
+}: Props) => {
+    let totalHolders: number = 0;
+    holderStats.tokenHistogram.bars.forEach(bar => totalHolders += bar.hight)
+
+    const avgOwned = (holderStats.totalSupply / totalHolders).toFixed(1);
+    const uniqueHolders = Math.round((totalHolders / holderStats.totalSupply) * 100)
+
     return (
         <div className="flex flex-col gap-y-3">
             <div className="text-white text-lg font-semibold">
@@ -13,7 +27,7 @@ export const HoldersState = () => {
                             Supply
                         </span>
                         <span className="text-white text-sm font-semibold">
-                            9,994
+                            {holderStats.totalSupply.toLocaleString()}
                         </span>
                     </div>
                 </div>
@@ -23,7 +37,7 @@ export const HoldersState = () => {
                             Holders
                         </span>
                         <span className="text-white text-sm font-semibold">
-                            1,941
+                            {totalHolders.toLocaleString()}
                         </span>
                     </div>
                 </div>
@@ -33,7 +47,7 @@ export const HoldersState = () => {
                             Avg. owned
                         </span>
                         <span className="text-white text-sm font-semibold">
-                            5.2
+                            {avgOwned}
                         </span>
                     </div>
                 </div>
@@ -43,7 +57,7 @@ export const HoldersState = () => {
                             Unique holders
                         </span>
                         <span className="text-white text-sm font-semibold">
-                            20%
+                            {`${uniqueHolders}%`}
                         </span>
                     </div>
                 </div>
