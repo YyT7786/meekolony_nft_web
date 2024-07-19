@@ -1,15 +1,39 @@
 "use client";
 
+import { useState } from "react";
+
 import {
     AlignJustify,
     LayoutGrid,
 } from "lucide-react";
-import { useState } from "react";
+
+import { 
+    FloorPriceMarketTrend,
+    ListingItems, 
+    NFTItems, 
+    SaleItems 
+} from "@/types/meekolony";
 import { cn } from "@/lib/utils";
+import { layoutType } from "@/constants";
+
 import { GridItemLayout } from "./grid-item-layout";
 import { ListItemLayout } from "./list-item-layout";
 
-export const ItemLayout = () => {
+type Props = {
+    layoutType: layoutType,
+    latestFloorPrice: FloorPriceMarketTrend,
+    listingItems?: ListingItems,
+    saleItems?: SaleItems,
+    walletItems?: NFTItems,
+}
+
+export const ItemLayout = ({
+    layoutType,
+    listingItems,
+    saleItems,
+    walletItems,
+    latestFloorPrice
+}: Props) => {
     const [isGrid, setIsGrid] = useState(true);
 
     const onChangeGridLayout = () => {
@@ -23,8 +47,21 @@ export const ItemLayout = () => {
     return (
         <div className="flex flex-col gap-y-4">
             <div className="flex items-center">
-                <div className="flex-1 text-white">
-                    1,000 Items
+                <div className="flex flex-1 flex-row items-center gap-x-1">
+                    <span className=" text-white text-sm lg:text-lg">
+                        {listingItems && (
+                            listingItems.results.length
+                        )}
+                        {saleItems && (
+                            saleItems.results.length
+                        )}
+                        {walletItems && (
+                            walletItems.results.filter(item => item.collectionName === "meekolony").length
+                        )}
+                    </span>
+                    <span className="text-white/40">
+                        Items
+                    </span>
                 </div>
                 <div className="flex items-center">
                     <button
@@ -65,8 +102,20 @@ export const ItemLayout = () => {
             </div>
 
             {isGrid
-                ? <GridItemLayout />
-                : <ListItemLayout />}
+                ? <GridItemLayout 
+                        layoutType={layoutType}
+                        listingItems={listingItems}
+                        saleItems={saleItems}
+                        walletItems={walletItems}
+                        latestFlootPrice={latestFloorPrice}
+                    />
+                : <ListItemLayout
+                        layoutType={layoutType}
+                        listingItems={listingItems}
+                        saleItems={saleItems}
+                        walletItems={walletItems}
+                        latestFlootPrice={latestFloorPrice}
+                    />}
         </div>
     )
 }
