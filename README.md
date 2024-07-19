@@ -17,7 +17,7 @@
 <img width="296" alt="image" src="https://github.com/user-attachments/assets/dcb20815-ea69-4ba8-8d9c-5ae24447fd76">
 <img width="296" alt="image" src="https://github.com/user-attachments/assets/d47cc995-2e07-47d9-bfd9-2037109434d8">
 
-## *Note: If there are issues with the MagicEden API, dummy constants will be displayed instead.
+*Note: If there are issues with the MagicEden API, dummy constants will be displayed instead.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
