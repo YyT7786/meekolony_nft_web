@@ -1,3 +1,13 @@
+Display
+<img width="1267" alt="image" src="https://github.com/user-attachments/assets/7bf65c0f-10e0-4c2d-8303-46ebe8083a40">
+<img width="1261" alt="image" src="https://github.com/user-attachments/assets/cd067898-0e70-4872-ae73-f6f5d7d31d14">
+<img width="1263" alt="image" src="https://github.com/user-attachments/assets/e45e3c42-f27f-4349-a532-9991b505f400">
+<img width="1264" alt="image" src="https://github.com/user-attachments/assets/aadfe55c-7358-4371-b69a-e717c7c59f52">
+<img width="1264" alt="image" src="https://github.com/user-attachments/assets/c21e329b-8942-4b25-beb9-ff1a57a406a8">
+<img width="1265" alt="image" src="https://github.com/user-attachments/assets/4b43e61c-6038-4324-9cd6-818cdd4d9a18">
+
+*Note: If there are issues with the MagicEden API, dummy constants will be displayed instead.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
