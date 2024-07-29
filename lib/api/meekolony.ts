@@ -40,6 +40,7 @@ const fetchApiData = cache(async (url: string, params?: any, dataConstant?: any)
         const response = await fetch(fullUrl, {
             method: 'GET',
             headers: {
+                'Content-Type': 'application/json',
                 "Access-Control-Allow-Credentials": "true",
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
