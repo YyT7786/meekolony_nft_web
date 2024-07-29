@@ -2,13 +2,13 @@
 
 import { startTransition, useEffect, useState } from "react";
 
-import { 
+import {
     FloorPriceMarketTrend,
-    ListingItems, 
-    NFTItems, 
-    SaleItems 
+    ListingItems,
+    NFTItems,
+    SaleItems
 } from "@/types/meekolony";
-import { 
+import {
     layoutType
 } from "@/constants";
 
@@ -37,7 +37,7 @@ export const GridItemLayout = ({
     const [listingItemsData, setListingItemsData] = useState(listingItems);
     const [saleItemsData, setSaleItemsData] = useState(saleItems);
 
-    useEffect (() => {
+    useEffect(() => {
         if (!listingItemsData) {
             return;
         }
@@ -52,14 +52,14 @@ export const GridItemLayout = ({
                     })
                     .catch(() => toast.error("Something went wrong"));
             })
-        }, 30000);
+        }, 300000);
 
         return () => {
             clearInterval(interval);
         };
     }, [listingItemsData]);
 
-    useEffect (() => {
+    useEffect(() => {
         if (!saleItemsData) {
             return;
         }
@@ -74,7 +74,7 @@ export const GridItemLayout = ({
                     })
                     .catch(() => toast.error("Something went wrong"));
             })
-        }, 30000);
+        }, 300000);
 
         return () => {
             clearInterval(interval);

@@ -7,11 +7,11 @@ import {
     LayoutGrid,
 } from "lucide-react";
 
-import { 
+import {
     FloorPriceMarketTrend,
-    ListingItems, 
-    NFTItems, 
-    SaleItems 
+    ListingItems,
+    NFTItems,
+    SaleItems
 } from "@/types/meekolony";
 import { cn } from "@/lib/utils";
 import { layoutType } from "@/constants";
@@ -102,20 +102,20 @@ export const ItemLayout = ({
             </div>
 
             {isGrid
-                ? <GridItemLayout 
-                        layoutType={layoutType}
-                        listingItems={listingItems}
-                        saleItems={saleItems}
-                        walletItems={walletItems}
-                        latestFlootPrice={latestFloorPrice}
-                    />
+                ? <GridItemLayout
+                    layoutType={layoutType}
+                    listingItems={listingItems}
+                    saleItems={saleItems}
+                    walletItems={walletItems}
+                    latestFlootPrice={latestFloorPrice}
+                />
                 : <ListItemLayout
-                        layoutType={layoutType}
-                        listingItems={listingItems}
-                        saleItems={saleItems}
-                        walletItems={walletItems}
-                        latestFlootPrice={latestFloorPrice}
-                    />}
+                    layoutType={layoutType}
+                    listingItems={listingItems}
+                    saleItems={saleItems}
+                    walletItems={walletItems}
+                    latestFlootPrice={latestFloorPrice}
+                />}
         </div>
     )
 }
