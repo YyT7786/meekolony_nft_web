@@ -1,9 +1,9 @@
-import { 
-    getFloorPriceMarketTrend, 
-    getHolders, 
-    getMeekolonyPassCollection, 
-    getMeekolonyPassCollectionStats, 
-    getSaleItems 
+import {
+    getFloorPriceMarketTrend,
+    getHolders,
+    getMeekolonyPassCollection,
+    getMeekolonyPassCollectionStats,
+    getSaleItems
 } from "@/lib/api/meekolony";
 import { ItemLayout } from "@/components/item-layout";
 import { CollectionHeader } from "@/components/collection-header";
@@ -31,15 +31,17 @@ const SalesPage = async () => {
 
     return (
         <div>
-            <CollectionHeader 
+            <CollectionHeader
                 meelokonyCollection={meekolonyPassCollection}
                 meelokonyCollectionStats={meekolonyPassCollectionStats}
                 latestFloorPrice={floorPrice1dChart[floorPrice1dChart.length - 1]}
                 holderStats={holderStats}
             />
-            <ItemLayout 
+            <ItemLayout
                 layoutType="sales"
+                listingItems={undefined}
                 saleItems={saleItems}
+                walletItems={undefined}
                 latestFloorPrice={floorPrice1dChart[floorPrice1dChart.length - 1]}
             />
         </div>

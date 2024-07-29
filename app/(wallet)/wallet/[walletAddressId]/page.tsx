@@ -1,7 +1,7 @@
-import { 
+import {
     getFloorPriceMarketTrend,
-    getNFTsByOwner, 
-    getWalletUserInfo, 
+    getNFTsByOwner,
+    getWalletUserInfo,
     isWalletUserValid
 } from "@/lib/api/meekolony";
 import { ItemLayout } from "@/components/item-layout";
@@ -32,18 +32,20 @@ const WalletIdPage = async ({
         nftItemsData,
         floorPrice1dChartData,
     ]);
-    
+
     return (
         <div>
-            <WalletHeader 
+            <WalletHeader
                 isWalletUserValid={isWalletValid}
                 walletUserInfo={walletUserInfo}
                 walletAddressId={params.walletAddressId}
                 walletItems={nftItems}
                 latestFloorPrice={floorPrice1dChart[floorPrice1dChart.length - 1]}
             />
-            <ItemLayout 
+            <ItemLayout
                 layoutType="wallet"
+                listingItems={undefined}
+                saleItems={undefined}
                 walletItems={nftItems}
                 latestFloorPrice={floorPrice1dChart[floorPrice1dChart.length - 1]}
             />
