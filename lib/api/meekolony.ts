@@ -14,6 +14,7 @@ import {
     walletUserInfo
 } from "@/constants"
 import { FloorPriceMarketTrend } from "@/types/meekolony"
+import { headers } from "next/headers"
 import { cache } from "react"
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`
@@ -39,13 +40,7 @@ const fetchApiData = cache(async (url: string, params?: any, dataConstant?: any)
 
         const response = await fetch(fullUrl, {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "Access-Control-Allow-Credentials": "true",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-                "Access-Control-Allow-Headers": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-            }
+            headers: new Headers(headers())
         });
 
         if (!response.ok) {
