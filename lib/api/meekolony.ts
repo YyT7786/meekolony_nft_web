@@ -35,30 +35,20 @@ const MEEKOLONY_HOLDER_STATS_URL = `${BASE_V2_URL}/collections/meekolony/holder_
 const MEEKOLONY_FLOOP_PRICE_MARKET_TREND_URL = `${BASE_STAT_URL}/collection_stats/getCollectionTimeSeriesV2/meekolony`
 
 const fetchApiData = cache(async (url: string, params?: any, dataConstant?: any) => {
-    try {
-        const queryString = params ? new URLSearchParams(params).toString() : '';
-        const fullUrl = queryString ? `${url}?${queryString}` : url;
-        console.log(fullUrl);
+    const queryString = params ? new URLSearchParams(params).toString() : '';
+    const fullUrl = queryString ? `${url}?${queryString}` : url;
+    console.log(fullUrl);
 
-        const response = await fetch(fullUrl, {
-            method: 'GET',
-            headers: new Headers(headers())
-        });
+    const response = await fetch(fullUrl, {
+        method: 'GET',
+        headers: new Headers(headers())
+    });
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch API data");
-        }
-
-        return response.json();
-    } catch {
-        if (dataConstant) {
-            const dataJsonString = JSON.stringify(dataConstant);
-            const dataJson = JSON.parse(dataJsonString);
-            return dataJson;
-        }
-
+    if (!response.ok) {
         throw new Error("Failed to fetch API data");
     }
+
+    return response.json();
 });
 
 export const getListingItems = async () => {
