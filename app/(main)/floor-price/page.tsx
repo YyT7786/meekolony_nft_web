@@ -1,9 +1,10 @@
-import { 
-    getFloorPriceMarketTrend, 
-    getHolders, 
-    getMeekolonyPassCollection, 
-    getMeekolonyPassCollectionStats 
+import {
+    getFloorPriceMarketTrend,
+    getHolders,
+    getMeekolonyPassCollection,
+    getMeekolonyPassCollectionStats
 } from "@/lib/api/meekolony";
+import { FloorPriceMarketTrend } from '@/types/meekolony';
 import { FloorPriceChart } from "./floor-price-chart";
 import { CollectionHeader } from "@/components/collection-header";
 
@@ -11,29 +12,30 @@ const FloorPricePage = async () => {
     const meekolonyPassCollectionData = getMeekolonyPassCollection();
     const meekolonyPassCollectionStatsData = getMeekolonyPassCollectionStats();
     const holderStatsData = getHolders();
-    const floorPrice1dChartData = getFloorPriceMarketTrend("1d");
+    const floorPrice1mChartData = getFloorPriceMarketTrend("1m");
 
     const [
         meekolonyPassCollection,
         meekolonyPassCollectionStats,
         holderStats,
-        floorPrice1dChart
+        floorPrice1mChart
     ] = await Promise.all([
         meekolonyPassCollectionData,
         meekolonyPassCollectionStatsData,
         holderStatsData,
-        floorPrice1dChartData
+        floorPrice1mChartData
     ]);
 
     return (
         <div>
-            <CollectionHeader 
+            <CollectionHeader
                 meelokonyCollection={meekolonyPassCollection}
                 meelokonyCollectionStats={meekolonyPassCollectionStats}
-                latestFloorPrice={floorPrice1dChart[floorPrice1dChart.length - 1]}
+                latestFloorPrice={floorPrice1mChart[floorPrice1mChart.length - 1]}
                 holderStats={holderStats}
             />
-            <FloorPriceChart/>
+            <FloorPriceChart
+                floorPriceMarketTrend={floorPrice1mChart} />
         </div>
     );
 };

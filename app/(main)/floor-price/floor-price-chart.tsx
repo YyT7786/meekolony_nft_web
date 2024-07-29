@@ -2,28 +2,31 @@
 
 import { cn } from '@/lib/utils';
 import { FloorPriceMarketTrend } from '@/types/meekolony';
-import { useState } from 'react';
+import { startTransition, useCallback, useEffect, useRef, useState } from 'react';
 import {
-    LineChart, 
-    Line, 
-    XAxis, 
-    YAxis, 
-    CartesianGrid, 
-    Tooltip, 
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
     Legend,
     ResponsiveContainer,
 } from 'recharts';
 
-import { 
+import {
     floorPrice1dChartData,
     floorPrice1wChartData,
     floorPrice1mChartData,
     floorPrice3mChartData,
     floorPrice6mChartData,
-    floorPriceAllChartData, 
-    marketTrendDateType 
+    floorPriceAllChartData,
+    marketTrendDateType
 } from '@/constants';
 import { convertSolToPriceString } from '@/lib/meekolony';
+import { getFloorPriceMarketTrend } from '@/lib/api/meekolony';
+import { toast } from 'sonner';
+import { Loader } from 'lucide-react';
 
 type CustomTooltipProps = {
     active?: boolean,
@@ -31,10 +34,17 @@ type CustomTooltipProps = {
     label?: number | string,
 }
 
-const formatDateDisplay = (ts:number | string | undefined) => {
+const formatDateDisplay = (ts: number | string | undefined) => {
     if (!ts) {
         return "";
     }
+
+    // Create a date object with the timestamp
+    const date = new Date(ts);
+
+    // Manually adjust the time for the +8 hour offset (Malaysia time)
+    const offsetHours = 8;
+    const localDate = new Date(date.getTime() + offsetHours * 60 * 60 * 1000);
 
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
@@ -43,13 +53,13 @@ const formatDateDisplay = (ts:number | string | undefined) => {
         hour: 'numeric',
         minute: 'numeric',
         hour12: true,
+        timeZone: 'Asia/Kuala_Lumpur' // Specify the Malaysia time zone
     };
 
-    const date = new Date(ts);
-    return date.toLocaleString('en-US', options);
+    return localDate.toLocaleString('en-US', options);
 };
 
-const formatDate = (ts:number | string | undefined) => {
+const formatDate = (ts: number | string | undefined) => {
     if (!ts) {
         return "";
     }
@@ -58,7 +68,7 @@ const formatDate = (ts:number | string | undefined) => {
     return date.toLocaleDateString();
 };
 
-const formatTimestamp = (ts:number | string | undefined) => {
+const formatTimestamp = (ts: number | string | undefined) => {
     if (!ts) {
         return "";
     }
@@ -67,45 +77,37 @@ const formatTimestamp = (ts:number | string | undefined) => {
     return date.toLocaleTimeString();
 };
 
-const formatYAxis = (value:number) => `${value} SOL`;
+const formatYAxis = (value: number) => `${value} SOL`;
 
-export const FloorPriceChart = () => {
+type Props = {
+    floorPriceMarketTrend: FloorPriceMarketTrend[];
+}
+
+export const FloorPriceChart = ({
+    floorPriceMarketTrend,
+}: Props) => {
     const [marketTrendDateType, setMarketTrendDateType] = useState<marketTrendDateType>("1m");
-    const [floorPriceData, setFlootPriceData] = useState<FloorPriceMarketTrend[]>(floorPrice1mChartData);
-    const [latestFloorData, setLatestFlootData] = useState<FloorPriceMarketTrend>(floorPrice1mChartData[floorPrice1mChartData.length - 1]);
+    const [floorPriceData, setFlootPriceData] = useState<FloorPriceMarketTrend[]>(floorPriceMarketTrend);
+    const [latestFloorData, setLatestFlootData] = useState<FloorPriceMarketTrend>(floorPriceMarketTrend[floorPriceMarketTrend.length - 1]);
+    const [isLoading, setLoading] = useState(false);
 
     const onClickMarketTrendDate = (marketTrendDateType: marketTrendDateType) => {
-        if (marketTrendDateType === "1d") {
-            setFlootPriceData(floorPrice1dChartData);
-            setLatestFlootData(floorPrice1dChartData[floorPrice1dChartData.length - 1])
-        }
+        startTransition(() => {
+            setLoading(true);
 
-        if (marketTrendDateType === "1w") {
-            setFlootPriceData(floorPrice1wChartData);
-            setLatestFlootData(floorPrice1wChartData[floorPrice1wChartData.length - 1])
-        }
+            getFloorPriceMarketTrend(marketTrendDateType)
+                .then((floorPriceMarketTrend) => {
+                    setFlootPriceData(floorPriceMarketTrend);
+                    setLatestFlootData(floorPriceMarketTrend[floorPriceMarketTrend.length - 1]);
 
-        if (marketTrendDateType === "1m") {
-            setFlootPriceData(floorPrice1mChartData);
-            setLatestFlootData(floorPrice1mChartData[floorPrice1mChartData.length - 1])
-        }
-
-        if (marketTrendDateType === "3m") {
-            setFlootPriceData(floorPrice3mChartData);
-            setLatestFlootData(floorPrice3mChartData[floorPrice3mChartData.length - 1])
-        }
-
-        if (marketTrendDateType === "6m") {
-            setFlootPriceData(floorPrice6mChartData);
-            setLatestFlootData(floorPrice6mChartData[floorPrice6mChartData.length - 1])
-        }
-
-        if (marketTrendDateType === "all") {
-            setFlootPriceData(floorPriceAllChartData);
-            setLatestFlootData(floorPriceAllChartData[floorPriceAllChartData.length - 1])
-        }
-
-        setMarketTrendDateType(marketTrendDateType);
+                    setMarketTrendDateType(marketTrendDateType);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    setLoading(false);
+                    toast.error("Something went wrong. Please try again.")
+                })
+        })
     };
 
     return (
@@ -200,49 +202,54 @@ export const FloorPriceChart = () => {
             </div>
 
             <div>
-                <ResponsiveContainer width="100%" height={400}>
-                    <LineChart
-                        data={floorPriceData}
-                    >
-                    <CartesianGrid strokeDasharray="3 3" />       
-                    { marketTrendDateType === "1d" 
-                        ? <XAxis
-                            dataKey="ts"
-                            tickFormatter={formatTimestamp}
-                            interval="preserveStartEnd"
-                            minTickGap={50}
-                            tick={{ fontSize: 12 }}
-                        />
-                        : <XAxis
-                            dataKey="ts"
-                            tickFormatter={formatDate}
-                            interval="preserveStartEnd"
-                            minTickGap={50}
-                            tick={{ fontSize: 12 }}
-                        />
-                    }
-                    <YAxis
-                        tickFormatter={formatYAxis}
-                        tick={{ fontSize: 12, textAnchor: 'end' }}
-                        width={80} 
-                    />
-                    <Tooltip
-                        content={CustomTooltip}
-                    />
-                    <Line type="monotone" dataKey="cFP" stroke="#8884d8" dot={false} />
-                    <Line type="monotone" dataKey="maxFP" stroke="#82ca9d" dot={false} />
-                    <Line type="monotone" dataKey="minFP" stroke="#ffc658" dot={false} />
-                    </LineChart>
-                </ResponsiveContainer>
+                {isLoading ? (
+                    <div className="h-full w-full flex items-center justify-center">
+                        <Loader className="h-6 w-6 text-muted-foreground animate-spin" />
+                    </div>
+                ) :
+                    <ResponsiveContainer width="100%" height={400}>
+                        <LineChart
+                            data={floorPriceData}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" />
+                            {marketTrendDateType === "1d"
+                                ? <XAxis
+                                    dataKey="ts"
+                                    tickFormatter={formatTimestamp}
+                                    interval="preserveStartEnd"
+                                    minTickGap={50}
+                                    tick={{ fontSize: 12 }}
+                                />
+                                : <XAxis
+                                    dataKey="ts"
+                                    tickFormatter={formatDate}
+                                    interval="preserveStartEnd"
+                                    minTickGap={50}
+                                    tick={{ fontSize: 12 }}
+                                />
+                            }
+                            <YAxis
+                                tickFormatter={formatYAxis}
+                                tick={{ fontSize: 12, textAnchor: 'end' }}
+                                width={80}
+                            />
+                            <Tooltip
+                                content={CustomTooltip}
+                            />
+                            <Line type="monotone" dataKey="cFP" stroke="#8884d8" dot={false} />
+                            <Line type="monotone" dataKey="maxFP" stroke="#82ca9d" dot={false} />
+                            <Line type="monotone" dataKey="minFP" stroke="#ffc658" dot={false} />
+                        </LineChart>
+                    </ResponsiveContainer>}
             </div>
         </div>
     );
 };
 
-const CustomTooltip = ({ 
-    active, 
-    payload, 
-    label 
+const CustomTooltip = ({
+    active,
+    payload,
+    label
 }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
         return (
@@ -276,7 +283,7 @@ const CustomTooltip = ({
                 </div>
             </div>
         );
-      }
-  
+    }
+
     return null;
 };

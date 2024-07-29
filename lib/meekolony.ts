@@ -35,12 +35,12 @@ export function getMeekolonyIndexName(meekolonyName: string) {
     return meekolonyIndex;
 }
 
-export function getOwnerAbbreviation(owner: string) {
+export function getOwnerAbbreviation(owner: string, stringLength = 5) {
     if (!owner) {
         return "--";
     }
 
-    var ownerAbbreviation = owner.substring(0, 5);
+    var ownerAbbreviation = owner.substring(0, stringLength);
     return ownerAbbreviation;
 }
 
@@ -67,6 +67,6 @@ export function shortenWalletAdrress(walletAdress: string, startLength = 5, endL
     return `${start}...${end}`;
 }
 
-export function getListPrice(price: number){
+export function getListPrice(price: number) {
     const priceAfterCalculation = price / 1000000000;
 }

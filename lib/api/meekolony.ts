@@ -1,17 +1,17 @@
-import { 
-    floorPrice1dChartData, 
-    floorPrice1mChartData, 
-    floorPrice1wChartData, 
-    floorPrice3mChartData, 
-    floorPrice6mChartData, 
-    floorPriceAllChartData, 
-    holderStats, 
-    listingItems, 
-    meekolonyPassCollection, 
-    meekolonyPassCollectionStats, 
-    nftsOwnedByOwner, 
-    saleItems, 
-    walletUserInfo 
+import {
+    floorPrice1dChartData,
+    floorPrice1mChartData,
+    floorPrice1wChartData,
+    floorPrice3mChartData,
+    floorPrice6mChartData,
+    floorPriceAllChartData,
+    holderStats,
+    listingItems,
+    meekolonyPassCollection,
+    meekolonyPassCollectionStats,
+    nftsOwnedByOwner,
+    saleItems,
+    walletUserInfo
 } from "@/constants"
 import { FloorPriceMarketTrend } from "@/types/meekolony"
 import { cache } from "react"
@@ -35,19 +35,19 @@ const fetchApiData = cache(async (url: string, params?: any, dataConstant?: any)
     try {
         const queryString = params ? new URLSearchParams(params).toString() : '';
         const fullUrl = queryString ? `${url}?${queryString}` : url;
-    
+        console.log(fullUrl);
+
         const response = await fetch(fullUrl, {
             method: 'GET'
         });
-    
+
         if (!response.ok) {
             throw new Error("Failed to fetch API data");
         }
-    
+
         return response.json();
     } catch {
-        if (dataConstant)
-        {
+        if (dataConstant) {
             const dataJsonString = JSON.stringify(dataConstant);
             const dataJson = JSON.parse(dataJsonString);
             return dataJson;
@@ -184,23 +184,45 @@ export const isWalletUserValid = async (walletAddress: string) => {
 
         const queryString = params ? new URLSearchParams(params).toString() : '';
         const fullUrl = queryString ? `${url}?${queryString}` : url;
-    
+
         const response = await fetch(fullUrl, {
             method: 'GET'
         });
-    
+
         if (!response.ok) {
             return false;
         }
-    
+
         return true;
     } catch {
         return false;
     }
 }
 
-export const getFloorPriceMarketTrend = async (numOfDays: "1d" | "1w" | "1m" | "3m" | "6m" | "all") => {
-    const numOfDaysString = numOfDays.toString();
+export const getFloorPriceMarketTrend = async (numOfDays: "1d" | "1w" | "1m" | "3m" | "6m" | "all"): Promise<FloorPriceMarketTrend[]> => {
+    const url = `${MEEKOLONY_FLOOP_PRICE_MARKET_TREND_URL}`;
+    let constantParams: FloorPriceMarketTrend[] = [];
+    let numOfDaysString = "1";
+
+    if (numOfDays === "1d") {
+        constantParams = floorPrice1dChartData;
+        numOfDaysString = "1";
+    } else if (numOfDays === "1w") {
+        constantParams = floorPrice1wChartData;
+        numOfDaysString = "7";
+    } else if (numOfDays === "1m") {
+        constantParams = floorPrice1mChartData;
+        numOfDaysString = "31";
+    } else if (numOfDays === "3m") {
+        constantParams = floorPrice3mChartData;
+        numOfDaysString = "60";
+    } else if (numOfDays === "6m") {
+        constantParams = floorPrice6mChartData;
+        numOfDaysString = "90";
+    } else if (numOfDays === "all") {
+        constantParams = floorPriceAllChartData;
+        numOfDaysString = "365";
+    }
 
     const params = {
         edge_cache: 'true',
@@ -208,23 +230,6 @@ export const getFloorPriceMarketTrend = async (numOfDays: "1d" | "1w" | "1m" | "
         numOfDays: numOfDaysString,
         chain: 'solana'
     };
-
-    const url = `${MEEKOLONY_FLOOP_PRICE_MARKET_TREND_URL}`;
-    let constantParams: FloorPriceMarketTrend[] = [];
-
-    if (numOfDays = "1d") {
-        constantParams = floorPrice1dChartData;
-    } else if (numOfDays = "1w") {
-        constantParams = floorPrice1wChartData;
-    } else if (numOfDays = "1m") {
-        constantParams = floorPrice1mChartData;
-    } else if (numOfDays = "3m") {
-        constantParams = floorPrice3mChartData;
-    } else if (numOfDays = "6m") {
-        constantParams = floorPrice6mChartData;
-    } else if (numOfDays = "all") {
-        constantParams = floorPriceAllChartData;
-    } 
 
     return fetchApiData(url, params, constantParams);
 }
