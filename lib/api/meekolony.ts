@@ -190,7 +190,8 @@ export const isWalletUserValid = async (walletAddress: string) => {
         const fullUrl = queryString ? `${url}?${queryString}` : url;
 
         const response = await fetch(fullUrl, {
-            method: 'GET'
+            method: 'GET',
+            headers: new Headers(headers())
         });
 
         if (!response.ok) {
