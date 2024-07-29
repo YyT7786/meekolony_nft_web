@@ -29,6 +29,7 @@ export const WalletHeader = ({
     const [copied, setCopied] = useState(false);
     const [isExtendedInfoVisible, setisExtendedInfoVisible] = useState(false);
     const walletAddress = walletAddressId;
+    console.log(walletAddress);
     const shortWalletAddress = walletAddress ? shortenWalletAdrress(walletAddress) : "";
     const meekolonyItemsCount = walletItems?.results.filter(item => item.collectionName === "meekolony").length ?? 0;
     const totalPortfolio = latestFloorPrice ? (meekolonyItemsCount * (latestFloorPrice.cFP)).toFixed(3) : 0;
