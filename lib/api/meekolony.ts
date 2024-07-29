@@ -18,7 +18,7 @@ import { cache } from "react"
 
 const BASE_URL = 'https://api-mainnet.magiceden.io'
 const BASE_DEV_URL = 'https://api-mainnet.magiceden.dev'
-const BASE_STAT_URL = 'https://stats-mainnet.magiceden.io/'
+const BASE_STAT_URL = 'https://stats-mainnet.magiceden.io'
 const BASE_DEV_V2_URL = `${BASE_DEV_URL}/v2`
 const BASE_V2_URL = `${BASE_URL}/v2`
 const BASE_RPC_URL = `${BASE_URL}/rpc`
