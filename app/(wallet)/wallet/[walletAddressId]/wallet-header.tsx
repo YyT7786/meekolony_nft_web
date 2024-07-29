@@ -1,30 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import Image from "next/image";
 import {
     ChevronDown,
     ChevronUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+import {
+    getFloorPriceMarketTrend,
+    getNFTsByOwner,
+    getWalletUserInfo,
+    isWalletUserValid
+} from "@/lib/api/meekolony";
 import { FloorPriceMarketTrend, NFTItems, WalletUserInfo } from "@/types/meekolony";
 import { convertSolToPriceString, getWalletImageUrl, shortenWalletAdrress } from "@/lib/meekolony";
 
 type Props = {
-    isWalletUserValid?: boolean,
-    walletAddressId?: string,
-    walletUserInfo?: WalletUserInfo,
-    latestFloorPrice?: FloorPriceMarketTrend,
-    walletItems?: NFTItems,
+    walletAddressId: string,
 }
 
 export const WalletHeader = ({
-    isWalletUserValid,
     walletAddressId,
-    walletUserInfo,
-    latestFloorPrice,
-    walletItems
 }: Props) => {
+
+    const isWalletUserValidData = isWalletUserValid(walletAddressId);
+    const walletUserInfoData = getWalletUserInfo(walletAddressId);
+    const nftItemsData = getNFTsByOwner(walletAddressId);
+    const floorPrice1dChartData = getFloorPriceMarketTrend("1d");
+
+    const [isUserValid, setIsUserValid] = useState<boolean>();
+    const [walletUserInfo, setWalletUserInfo] = useState<WalletUserInfo>();
+    const [latestFloorPrice, setLatestFloorPriced] = useState<FloorPriceMarketTrend>();
+    const [walletItems, setWalletItems] = useState<NFTItems>();
+
+    useEffect(() => {
+        startTransition(async () => {
+            const [
+                isWalletValid,
+                walletUserInfo,
+                nftItems,
+                floorPrice1dChart
+            ] = await Promise.all([
+                isWalletUserValidData,
+                walletUserInfoData,
+                nftItemsData,
+                floorPrice1dChartData,
+            ]);
+
+            setIsUserValid(isWalletValid);
+            setWalletUserInfo(walletUserInfo);
+            setWalletItems(nftItems);
+            setLatestFloorPriced(floorPrice1dChart[floorPrice1dChart.length - 1]);
+        });
+    });
 
     const [copied, setCopied] = useState(false);
     const [isExtendedInfoVisible, setisExtendedInfoVisible] = useState(false);
