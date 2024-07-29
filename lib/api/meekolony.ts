@@ -1,3 +1,5 @@
+"use server"
+
 import {
     floorPrice1dChartData,
     floorPrice1mChartData,
