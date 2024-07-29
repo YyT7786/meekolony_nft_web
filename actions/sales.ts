@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { getSaleItems } from "@/lib/api/meekolony"
 
 export const GetLatestSaleItems = async () => {
-    var saleItems = getSaleItems();
+    var saleItems = await getSaleItems();
 
     // To ensure the cache data is updated
     revalidatePath("/floor-price");
