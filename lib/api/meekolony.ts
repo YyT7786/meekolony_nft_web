@@ -16,9 +16,9 @@ import {
 import { FloorPriceMarketTrend } from "@/types/meekolony"
 import { cache } from "react"
 
-const BASE_URL = 'https://api-mainnet.magiceden.io'
-const BASE_DEV_URL = 'https://api-mainnet.magiceden.dev'
-const BASE_STAT_URL = 'https://stats-mainnet.magiceden.io'
+const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`
+const BASE_DEV_URL = `${process.env.NEXT_PUBLIC_BASE_DEV_URL}`
+const BASE_STAT_URL = `${process.env.NEXT_PUBLIC_BASE_STAT_URL}`
 const BASE_DEV_V2_URL = `${BASE_DEV_URL}/v2`
 const BASE_V2_URL = `${BASE_URL}/v2`
 const BASE_RPC_URL = `${BASE_URL}/rpc`
