@@ -32,9 +32,12 @@ export const WalletHeader = ({
     const shortWalletAddress = walletAddress ? shortenWalletAdrress(walletAddress) : "";
     const meekolonyItemsCount = walletItems?.results.filter(item => item.collectionName === "meekolony").length ?? 0;
     const totalPortfolio = latestFloorPrice ? (meekolonyItemsCount * (latestFloorPrice.cFP)).toFixed(3) : 0;
-    const walletUserImage = walletUserInfo ? walletUserInfo.avatarMintImg : "";
+    const walletUserImageBasedOnUrl = walletAddress ? getWalletImageUrl(walletAddress) : "";
+    const walletUserImage = walletUserInfo
+        ? walletUserInfo.avatarMintImg ?? walletUserImageBasedOnUrl
+        : "";
 
-    let totalCost:number = 0;
+    let totalCost: number = 0;
     walletItems?.results
         .filter(item => item.collectionName === "meekolony")
         .forEach((item) => {
@@ -82,7 +85,7 @@ export const WalletHeader = ({
                                         </div>
                                     </div>
                                     <div className="flex flex-row gap-x-2">
-                                        <button 
+                                        <button
                                             onClick={onCopy}
                                             className="flex flex-row border rounded-lg border-[#484385] px-2.5 py-1 items-center gap-x-1.5 hover:opacity-80">
                                             <div>
@@ -93,12 +96,12 @@ export const WalletHeader = ({
                                                     width={12}
                                                 />
                                             </div>
-                                            <div 
+                                            <div
                                                 className="text-white text-xs"
                                             >
                                                 {copied
                                                     ? "Copied !"
-                                                    : shortWalletAddress}                                            
+                                                    : shortWalletAddress}
                                             </div>
                                         </button>
                                     </div>
@@ -154,7 +157,7 @@ export const WalletHeader = ({
                         </div>
                     </div>
                 </div>
-                { !isWalletUserValid && (
+                {!isWalletUserValid && (
                     <div className="text-white/40 text-[10px] mt-2">
                         *Something went wrong, dummy data will be used.
                     </div>
