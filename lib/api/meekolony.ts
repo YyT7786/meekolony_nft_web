@@ -42,7 +42,10 @@ const fetchApiData = cache(async (url: string, params?: any, dataConstant?: any)
 
         const response = await fetch(fullUrl, {
             method: 'GET',
-            headers: new Headers(headers())
+            headers: {
+                accept: 'application/json',
+                'User-agent': 'learning app',
+            }
         });
 
         if (!response.ok) {
@@ -191,7 +194,10 @@ export const isWalletUserValid = async (walletAddress: string) => {
 
         const response = await fetch(fullUrl, {
             method: 'GET',
-            headers: new Headers(headers())
+            headers: {
+                accept: 'application/json',
+                'User-agent': 'learning app',
+            }
         });
 
         if (!response.ok) {
